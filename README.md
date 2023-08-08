@@ -4,12 +4,12 @@
 
  <!-- LOGO -->
 
-  <img src="./src/assets/My Logo.png" alt="logo" width="140"  height="auto" />
+  <img src="./src/assets/r-and-m-logo.png" alt="logo" width="140"  height="auto" />
   <br/>
 
 <!-- MAIN HEADING -->
 
-  <h3><b>To Do List</b></h3>
+  <h3><b>Rick and Morty</b></h3>
 
 </div>
 
