@@ -8,9 +8,11 @@ body {
   padding: 0;
   overflow-x: hidden;
   position: relative;
+  font-family: 'Roboto', sans-serif;
 }
 
-.header {
+.header,
+footer {
     background-color: antiquewhite;
     padding: 10px;
     justify-content:space-between;
@@ -25,13 +27,22 @@ body {
     display: flex;
 }
 .header img:hover {
-    filter: opacity(0.5) drop-shadow(0 0 #00ffc8);
+    /* filter: opacity(0.5) drop-shadow(0 0 #00ffc8); */
+    transform: scale(1.5);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .header img {
     width: 80px;
     height: 80px;
-    border-radius: 50px;
+    border:2px solid #fff;
+    /* background: url(img/duck.png) no-repeat; */
+    -moz-box-shadow: 0px 6px 5px #ccc;
+    -webkit-box-shadow: 0px 6px 5px #ccc;
+    box-shadow: 0px 6px 5px #ccc;
+    -moz-border-radius:190px;
+    -webkit-border-radius:190px;
+    border-radius:190px;
 }
 
 .header img,
@@ -42,11 +53,23 @@ li {
 
 .header ul {
     list-style-type: none;
-    font-family: 'Roboto', sans-serif;
     font-size: 30px;
     font-weight: bold;
-    color: #00ffc8;
+    color: #1d4f84;
     text-shadow: #101312;
     justify-content: space-between;
     gap: 40px;
+}
+
+li:nth-child(1) {
+ text-decoration: underline;
+}
+
+footer {
+   font-size: 30px;
+   color: #1d4f84;
+}
+
+hr {
+   border: 2px solid #1d4f84;
 }
