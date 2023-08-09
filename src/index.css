@@ -1,0 +1,158 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  position: relative;
+  font-family: 'Roboto', sans-serif;
+}
+
+#date-time {
+  text-align: right;
+  padding: 10px;
+  background-color: blue;
+  color: aqua;
+}
+
+.header,
+footer {
+  background-color: antiquewhite;
+  padding: 10px;
+}
+
+.character-container {
+  max-width: 200px;
+
+  /* border: 1px solid red; */
+}
+
+.header,
+footer,
+.below-image {
+  justify-content: space-between;
+}
+
+.header-list {
+  justify-self: end;
+}
+
+.header,
+.header-list,
+.below-image,
+.likes,
+.reactions,
+main {
+  display: flex;
+}
+
+.header img {
+  width: 80px;
+  height: 80px;
+  border: 2px solid #fff;
+  -moz-box-shadow: 0 6px 5px #ccc;
+  -webkit-box-shadow: 0 6px 5px #ccc;
+  box-shadow: 0 6px 5px #ccc;
+  -moz-border-radius: 190px;
+  -webkit-border-radius: 190px;
+  border-radius: 190px;
+}
+
+.header img,
+li {
+  margin: 0 40px 0 40px;
+}
+
+.header img,
+li,
+.fa-heart,
+.comment,
+.reservation {
+  cursor: pointer;
+}
+
+.header img:hover {
+  transform: scale(1.5);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.fa-heart {
+  margin-top: 15px;
+  font-size: 25px;
+}
+
+.comment,
+.reservation {
+  border: 1px solid #1d4f84;
+  padding: 3px;
+  box-shadow: 4px 4px 0 rgb(2, 2, 2);
+}
+
+.fa-heart:hover,
+.comment:hover,
+.reservation:hover {
+  color: blue;
+}
+
+.header ul,
+footer {
+  color: #1d4f84;
+}
+
+.header ul {
+  list-style-type: none;
+  font-size: 30px;
+  font-weight: bold;
+  justify-content: space-between;
+}
+
+.header ul,
+main {
+  gap: 40px;
+}
+
+main {
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-width: 700px;
+  align-items: center;
+  margin: 20px  auto;
+}
+
+li:nth-child(1) {
+  text-decoration: underline;
+}
+
+.character {
+  width: 200px;
+  height: 200px;
+}
+
+.below-image {
+  padding: 5px;
+}
+
+.likes,
+.reactions {
+  flex-direction: column;
+  align-items: center;
+}
+
+.reactions {
+  gap: 10px;
+}
+
+footer {
+  font-size: 20px;
+}
+
+hr {
+  border: 2px solid #1d4f84;
+}
