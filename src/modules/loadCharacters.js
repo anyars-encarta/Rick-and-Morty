@@ -5,7 +5,7 @@ export async function fetchCharacters() {
     const data = await response.json();
     return data.results;
   } catch (error) {
-    console.error('Error fetching characters:', error);
+    // console.error('Error fetching characters:', error);
     return [];
   }
 }
@@ -16,7 +16,7 @@ export async function loadCharacters() {
   const characterCountElement = document.getElementById('character-count');
   const characters = await fetchCharacters();
 
-  //Display Character counts 
+  // Display Character counts
   characterCountElement.textContent = `Characters(${characters.length})`;
 
   characters.forEach((character) => {
@@ -36,7 +36,7 @@ export async function loadCharacters() {
           <span class="reservation">Reservations</span>
         </div>
       `;
-  
-      charactersContainer.appendChild(characterElement);
-    });
-  }
+
+    charactersContainer.appendChild(characterElement);
+  });
+}
