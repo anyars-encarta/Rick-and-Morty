@@ -39,11 +39,11 @@ export async function addLike(characterId) {
 // Load characters to UI
 export async function loadCharacters() {
   const charactersContainer = document.querySelector('.all-characters');
-  // const characterCountElement = document.getElementById('character-count');
+  const characterCountElement = document.getElementById('character-count');
   const characters = await fetchCharacters();
 
   // Display Character counts
-  // characterCountElement.textContent = `Characters(${characters.length})`;
+  characterCountElement.textContent = `Characters(${characters.length})`;
 
   characters.forEach((character) => {
     const characterElement = document.createElement('div');
@@ -101,31 +101,26 @@ export function updateModalContent(character) {
   const modalBody = document.querySelector('.modal-body');
   if (!modalBody) {
     throw new Error('Modal body not found');
-    // return;
   }
 
   const characterContainer = modalBody.querySelector('.character-content');
   if (!characterContainer) {
     throw new Error('Character container not found');
-    // return;
   }
 
   const features1 = modalBody.querySelector('.features-1');
   if (!features1) {
     throw new Error('Features 1 container not found');
-    // return;
   }
 
   const features2 = modalBody.querySelector('.features-2');
   if (!features2) {
     throw new Error('Features 2 container not found');
-    // return;
   }
 
-  const commentsList = modalBody.querySelector('ul'); // Directly target the <ul> element
+  const commentsList = modalBody.querySelector('ul');
   if (!commentsList) {
     throw new Error('Comments list not found');
-    // return;
   }
 
   characterContainer.querySelector('img').src = character.image;
