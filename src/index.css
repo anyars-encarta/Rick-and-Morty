@@ -78,6 +78,11 @@ li,
   cursor: pointer;
 }
 
+.modal-body img {
+  width: 300px;
+  height: 300px;
+}
+
 .header img:hover {
   transform: scale(1.5);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -126,7 +131,7 @@ main {
   margin: 20px  auto;
 }
 
-li:nth-child(1) {
+.header-list li:nth-child(1) {
   text-decoration: underline;
 }
 
@@ -155,4 +160,43 @@ footer {
 
 hr {
   border: 2px solid #1d4f84;
+}
+
+/* -----------------------------------------------------------------MODAL CSS----------------------------------------------- */
+.modal-body p,
+h4 {
+  text-align: center;
+  font-weight: bold;
+}
+
+.modal-body ul {
+  list-style-type: none;
+}
+
+.modal-dialog {
+  width: 600px;
+}
+
+.character-content,
+.features-1,
+.features-2,
+form {
+  display: flex;
+}
+
+.character-content,
+form {
+  flex-direction: column;
+  align-items: center;
+}
+
+.features-1,
+.features-2 {
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: start;
+}
+
+.btn-primary {
+  flex-direction: column;
 }
