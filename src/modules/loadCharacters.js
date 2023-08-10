@@ -74,7 +74,6 @@ export async function loadCharacters() {
       await addLike(characterId);
     });
   });
-
   return characters; // Return the characters array
 }
 
