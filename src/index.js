@@ -1,5 +1,3 @@
-// index.js
-
 import {
   loadCharacters, fetchCharacterDetails, updateModalContent,
 } from './modules/loadCharacters.js';
