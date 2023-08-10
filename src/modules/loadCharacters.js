@@ -39,11 +39,11 @@ export async function addLike(characterId) {
 // Load characters to UI
 export async function loadCharacters() {
   const charactersContainer = document.querySelector('.all-characters');
-  // const characterCountElement = document.getElementById('character-count');
+  const characterCountElement = document.getElementById('character-count');
   const characters = await fetchCharacters();
 
   // Display Character counts
-  // characterCountElement.textContent = `Characters(${characters.length})`;
+  characterCountElement.textContent = `Characters(${characters.length})`;
 
   characters.forEach((character) => {
     const characterElement = document.createElement('div');
