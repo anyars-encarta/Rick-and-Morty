@@ -46,21 +46,19 @@
             </div>
 
             <p>Comments (X)</p>
-            <ul>
-              <li>Comment 1</li>
-              <li>Comment 2</li>
-              <li>Comment 3</li>
+            <ul class="comment-body">
+              <!-- Comments go here -->
             </ul>
 
             <form action="POST">
               <h4>Add a comment</h4>
               <label for="name" class="name" hidden="true"></label>
-              <input type="text" id="name" class="name form-control" placeholder="Your name">
+              <input type="text" id="name" class="name nameInput form-control" placeholder="Your name">
               <br>
               <label for="insight" class="insight" hidden="true"></label>
-              <textarea name="insight" id="insight" class="form-control" placeholder="Your insight" cols="30" rows="5"></textarea>
+              <textarea name="insight" id="insight" class="form-control insightInput" placeholder="Your insight" cols="30" rows="5"></textarea>
               <br>
-              <button type="button" class="btn btn-primary">Comment</button>
+              <button type="button" id="button" class="btn btn-primary">Comment</button>
             </form>
 
           </div>
