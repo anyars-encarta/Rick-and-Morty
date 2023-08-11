@@ -199,8 +199,6 @@ export function updateModalContent(character) {
     <p><b>Gender:</b> ${character.gender || 'Unknown'}</p>
     <p><b>Origin:</b> ${character.origin?.name || 'Unknown'}</p>
   `;
-
-  // commentsList.innerHTML = (character.comments || []).map((comment) => `<li>${comment}</li>`).join('');
 }
 
 // For from Submit button
@@ -209,19 +207,19 @@ const commentBody = document.querySelector('.comment-body');
 const nameInput = document.querySelector('.nameInput');
 const insight = document.querySelector('.insightInput');
 
-// add event listener to the button
-button.addEventListener('click', insertComment);
-
 // define the function to change the HTML content
 function insertComment() {
   const newDate = new Date().toLocaleDateString();
   const commentItem = document.createElement('li');
   commentItem.setAttribute('class', 'comment-');
-  commentItem.innerHTML = newDate + ' ' + nameInput.value + ': ' + insight.value;
+  commentItem.innerHTML = `${newDate} ${nameInput.value}: ${insight.value}`;
   commentBody.appendChild(commentItem);
   nameInput.value = '';
   insight.value = '';
 }
+
+// add event listener to the button
+button.addEventListener('click', insertComment);
 
 // Load characters and update UI on page load
 async function initialize() {
