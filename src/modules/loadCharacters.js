@@ -223,7 +223,6 @@ function insertComment() {
   insight.value = '';
 }
 
-
 // Load characters and update UI on page load
 async function initialize() {
   await loadCharacters();
