@@ -142,6 +142,11 @@ const countCharacters = async () => {
   characterCountElement.textContent = `Characters(${characters.length})`;
 };
 
+const countComments = async (data) => {
+  const commentCountElement = document.getElementById('comment-counter');
+  commentCountElement.textContent = `Comments(${data.length < 1 ? 0 : data.length})`;
+};
+
 export const fetchComments = async (appId, characterId) => {
   try {
     const queryString = `?item_id=${characterId}`;
@@ -151,7 +156,7 @@ export const fetchComments = async (appId, characterId) => {
 
     if (response.ok) {
       const data = await response.json();
-      // countComments(data);
+      countComments(data);
       return data.map((comment) => {
         const formattedDate = new Date(comment.creation_date).toLocaleDateString();
         return `${formattedDate} ${comment.username}: ${comment.comment}`;
@@ -216,11 +221,6 @@ export const updateModalContent = async (character) => {
     throw new Error('Error updating comments:', error);
   }
 };
-
-// const countComments = async (data) => {
-//   const commentCountElement = document.getElementById('comment-counter');
-//   commentCountElement.textContent = `Comments(${data.length < 1 ? 0 : data.length})`;
-// }
 
 export const addComment = async (characterId, name, comment) => {
   try {
