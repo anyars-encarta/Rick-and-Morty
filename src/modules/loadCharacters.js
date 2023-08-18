@@ -1,5 +1,7 @@
-// Fetch Characters data from API
-export async function fetchCharacters() {
+/* global bootstrap */
+const myAppId = '3rhiucgu7avOD8E9hBq1';
+
+export const fetchCharacters = async () => {
   try {
     const response = await fetch('https://rickandmortyapi.com/api/character');
     const data = await response.json();
@@ -7,19 +9,17 @@ export async function fetchCharacters() {
   } catch (error) {
     return [];
   }
-}
+};
 
-// Function to update localStorage with new like count
-function updateLocalStorage(characterId, likeCount) {
+export const updateLocalStorage = (characterId, likeCount) => {
   const storedLikes = JSON.parse(localStorage.getItem('likes')) || {};
   storedLikes[characterId] = likeCount;
   localStorage.setItem('likes', JSON.stringify(storedLikes));
-}
+};
 
-// Add a new function to add a like for a character and save it to the Involvement API
-export async function addLike(characterId) {
+export const addLike = async (characterId) => {
   try {
-    const response = await fetch('https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/3rhiucgu7avOD8E9hBq1/likes', {
+    const response = await fetch(`https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/${myAppId}/likes`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -29,32 +29,30 @@ export async function addLike(characterId) {
       }),
     });
 
-    if (response.ok) {
-      // Update the UI with the new like count
-      const likeCountElement = document.querySelector(`[data-id="${characterId}"] + .like-count`);
-      if (likeCountElement) {
-        const currentLikes = parseInt(likeCountElement.textContent, 10);
-        const newLikes = currentLikes + 1;
-        likeCountElement.textContent = `${newLikes} Like${newLikes === 1 ? '' : 's'}`;
-
-        // Update localStorage with new like count
-        updateLocalStorage(characterId, newLikes);
-      }
-    } else {
+    if (!response.ok) {
       throw new Error('Failed to add like');
+    }
+
+    const likeCountElement = document.querySelector(`[data-id="${characterId}"] + .like-count`);
+
+    if (likeCountElement) {
+      const currentLikes = parseInt(likeCountElement.textContent, 10);
+      const newLikes = currentLikes + 1;
+      likeCountElement.textContent = `${newLikes} Like${newLikes === 1 ? '' : 's'}`;
+      updateLocalStorage(characterId, newLikes);
     }
   } catch (error) {
     throw new Error('Error adding like');
   }
-}
+};
 
-// Fetch the like counts from the Involvement API
-async function fetchLikesFromInvolvementAPI(characters) {
+export const fetchLikesFromInvolvementAPI = async (characters) => {
   const likes = {};
   const characterIds = characters.map((character) => character.id);
+
   await Promise.all(characterIds.map(async (characterId) => {
     try {
-      const response = await fetch(`https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/3rhiucgu7avOD8E9hBq1/likes?item_id=${characterId}`);
+      const response = await fetch(`https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/${myAppId}/likes?item_id=${characterId}`);
       if (response.ok) {
         const data = await response.json();
         likes[characterId] = data.likes;
@@ -63,11 +61,11 @@ async function fetchLikesFromInvolvementAPI(characters) {
       throw new Error(`Error fetching likes for character ${characterId}: ${error}`);
     }
   }));
-  return likes;
-}
 
-// Function to fetch additional character details
-export async function fetchCharacterDetails(characterId) {
+  return likes;
+};
+
+export const fetchCharacterDetails = async (characterId) => {
   try {
     const response = await fetch(`https://rickandmortyapi.com/api/character/${characterId}`);
     const data = await response.json();
@@ -78,58 +76,45 @@ export async function fetchCharacterDetails(characterId) {
       species: data.species,
       gender: data.gender,
       origin: data.origin,
-      comments: ['Comment 1', 'Comment 2', 'Comment 3'], // Replace with actual comments data
+      comments: ['Comment 1', 'Comment 2', 'Comment 3'],
     };
   } catch (error) {
     return null;
   }
-}
+};
 
-// Update the UI with the like counts
-function updateUIWithLikeCounts(likes) {
-  const characterIds = document.querySelectorAll('[data-id]');
-  characterIds.forEach((characterId) => {
-    const likeCountElement = characterId.nextElementSibling.querySelector('.like-count');
-    const likeCount = likes[characterId.getAttribute('data-id')];
-    likeCountElement.textContent = `${likeCount || 0} Like${likeCount === 0 ? '' : 's'}`;
+export const updateUIWithLikeCounts = (likes) => {
+  const likeCountElements = document.querySelectorAll('.like-count');
+  likeCountElements.forEach((likeCountElement) => {
+    const characterId = likeCountElement.parentElement.querySelector('.fa-heart')?.getAttribute('data-id');
+    const likeCount = likes[characterId] || 0;
+    likeCountElement.textContent = `${likeCount} Like${likeCount === 1 ? '' : 's'}`;
   });
-}
+};
 
-// Load characters to UI
-export async function loadCharacters() {
+let cWithDetails = [];
+
+export const loadCharacters = async () => {
   const charactersContainer = document.querySelector('.all-characters');
-  const characterCountElement = document.getElementById('character-count');
   const characters = await fetchCharacters();
 
-  // Display Character counts
-  characterCountElement.textContent = `Characters(${characters.length})`;
-
-  // Fetch likes from localStorage
-  const storedLikes = JSON.parse(localStorage.getItem('likes')) || {};
-
-  // Fetch likes from Involvement API
-  const likes = await fetchLikesFromInvolvementAPI(characters);
-
-  // Merge likes from localStorage and Involvement API
+  const [storedLikes, likes] = await Promise.all([JSON.parse(localStorage.getItem('likes')) || {}, fetchLikesFromInvolvementAPI(characters)]);
   const mergedLikes = { ...likes, ...storedLikes };
-
-  // Update the UI with the like counts
   updateUIWithLikeCounts(mergedLikes);
 
-  // Fetch character details for all characters
+  charactersContainer.innerHTML = '';
+
   const characterPromises = characters.map(async (character) => {
     const characterDetails = await fetchCharacterDetails(character.id);
-    character.comments = characterDetails.comments; // Add comments to the character object
+    character.comments = characterDetails.comments;
     return character;
   });
 
-  // Wait for all character details to be fetched
-  const charactersWithDetails = await Promise.all(characterPromises);
+  cWithDetails = await Promise.all(characterPromises);
 
-  // Update the UI with characters and their details
-  charactersWithDetails.forEach((character) => {
+  cWithDetails.forEach((character) => {
     const characterElement = document.createElement('div');
-    characterElement.setAttribute('class', 'character-container');
+    characterElement.className = 'character-container';
     characterElement.innerHTML = `
         <img class="character" src="${character.image}" alt="Image of - ${character.name}">
         <div class="below-image">
@@ -148,20 +133,43 @@ export async function loadCharacters() {
     charactersContainer.appendChild(characterElement);
   });
 
-  // Add event listener to each "Likes" icon
-  const likeIcons = document.querySelectorAll('.fa-heart');
-  likeIcons.forEach((likeIcon) => {
-    likeIcon.addEventListener('click', async () => {
-      const characterId = likeIcon.getAttribute('data-id');
-      await addLike(characterId);
-    });
-  });
+  return cWithDetails;
+};
 
-  return charactersWithDetails; // Return the characters array with details
-}
+const countCharacters = async () => {
+  const characters = await fetchCharacters();
+  const characterCountElement = document.getElementById('character-count');
+  characterCountElement.textContent = `Characters(${characters.length})`;
+};
 
-// Function to update modal content with character details
-export function updateModalContent(character) {
+const countComments = async (data) => {
+  const commentCountElement = document.getElementById('comment-counter');
+  commentCountElement.textContent = `Comments(${data.length < 1 ? 0 : data.length})`;
+};
+
+export const fetchComments = async (appId, characterId) => {
+  try {
+    const queryString = `?item_id=${characterId}`;
+    const url = `https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/${appId}/comments${queryString}`;
+
+    const response = await fetch(url);
+
+    if (response.ok) {
+      const data = await response.json();
+      countComments(data);
+      return data.map((comment) => {
+        const formattedDate = new Date(comment.creation_date).toLocaleDateString();
+        return `${formattedDate} ${comment.username}: ${comment.comment}`;
+      });
+    }
+    const errorMessage = await response.text();
+    throw new Error(`Failed to fetch comments: ${errorMessage}`);
+  } catch (error) {
+    return [];
+  }
+};
+
+export const updateModalContent = async (character) => {
   const modalBody = document.querySelector('.modal-body');
   if (!modalBody) {
     throw new Error('Modal body not found');
@@ -182,7 +190,7 @@ export function updateModalContent(character) {
     throw new Error('Features 2 container not found');
   }
 
-  const commentsList = modalBody.querySelector('ul');
+  const commentsList = modalBody.querySelector('.comment-body');
   if (!commentsList) {
     throw new Error('Comments list not found');
   }
@@ -199,42 +207,150 @@ export function updateModalContent(character) {
     <p><b>Gender:</b> ${character.gender || 'Unknown'}</p>
     <p><b>Origin:</b> ${character.origin?.name || 'Unknown'}</p>
   `;
-}
 
-// For from Submit button
+  try {
+    const updatedComments = await fetchComments(myAppId, character.id);
+    commentsList.innerHTML = '';
+    updatedComments.forEach((comment) => {
+      const commentItem = document.createElement('li');
+      commentItem.className = 'comment-';
+      commentItem.textContent = comment;
+      commentsList.appendChild(commentItem);
+    });
+  } catch (error) {
+    throw new Error('Error updating comments:', error);
+  }
+};
+
+export const addComment = async (characterId, name, comment) => {
+  try {
+    const response = await fetch(`https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps/${myAppId}/comments`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        item_id: characterId,
+        username: name,
+        comment,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to add comment');
+    }
+  } catch (error) {
+    throw new Error('Error adding comment');
+  }
+};
+
 const button = document.getElementById('button');
-const commentBody = document.querySelector('.comment-body');
 const nameInput = document.querySelector('.nameInput');
 const insight = document.querySelector('.insightInput');
 
-// define the function to change the HTML content
-function insertComment() {
-  const newDate = new Date().toLocaleDateString();
-  const commentItem = document.createElement('li');
-  commentItem.setAttribute('class', 'comment-');
-  commentItem.innerHTML = `${newDate} ${nameInput.value}: ${insight.value}`;
-  commentBody.appendChild(commentItem);
+const insertComment = async (event) => {
+  const commentButton = event.target;
+  const characterId = commentButton.getAttribute('data-id');
+
+  const modalBody = document.querySelector('.modal-body');
+  if (!modalBody) {
+    throw new Error('Modal body not found');
+  }
+
+  try {
+    await addComment(characterId, nameInput.value, insight.value);
+
+    const updatedComments = await fetchComments(myAppId, characterId);
+
+    const commentList = modalBody.querySelector('.comment-body');
+    if (!commentList) {
+      throw new Error('Comments list not found');
+    }
+
+    commentList.innerHTML = '';
+    updatedComments.forEach((comment) => {
+      const commentItem = document.createElement('li');
+      commentItem.className = 'comment-';
+      commentItem.textContent = comment;
+      commentList.appendChild(commentItem);
+    });
+  } catch (error) {
+    throw new Error('Error adding comment:', error);
+  }
+
   nameInput.value = '';
   insight.value = '';
-}
+};
 
-// add event listener to the button
 button.addEventListener('click', insertComment);
 
-// Load characters and update UI on page load
-async function initialize() {
-  await loadCharacters();
+let isInitialized = false;
+let modalBody;
+let modal;
 
-  // Add event listener to the parent container of "Likes" icons
-  const charactersContainer = document.querySelector('.all-characters');
-  charactersContainer.addEventListener('click', async (event) => {
-    if (event.target.classList.contains('fa-heart')) {
-      const characterId = event.target.getAttribute('data-id');
-      event.target.classList.add('disabled'); // Disable the icon temporarily
-      await addLike(characterId);
-      event.target.classList.remove('disabled'); // Re-enable the icon
-    }
-  });
-}
+export const initialize = async () => {
+  if (!isInitialized) {
+    await loadCharacters();
+    countCharacters();
+    const charactersContainer = document.querySelector('.all-characters');
+
+    charactersContainer.addEventListener('click', async (event) => {
+      if (event.target.classList.contains('fa-heart')) {
+        event.stopImmediatePropagation();
+
+        const characterId = event.target.getAttribute('data-id');
+        event.target.classList.add('disabled');
+        try {
+          await addLike(characterId);
+        } finally {
+          event.target.classList.remove('disabled');
+        }
+      }
+
+      if (event.target.classList.contains('comment')) {
+        const characterId = event.target.getAttribute('data-id');
+        button.setAttribute('data-id', characterId);
+        if (characterId) {
+          const card = cWithDetails.find((card) => card.id.toString() === characterId);
+
+          if (card) {
+            await updateModalContent(card);
+
+            modalBody = document.querySelector('.modal-body');
+
+            if (!modalBody) {
+              throw new Error('Modal body not found');
+            }
+
+            const commentsList = modalBody.querySelector('.comment-body');
+            if (commentsList) {
+              try {
+                const updatedComments = await fetchComments(myAppId, characterId);
+
+                commentsList.innerHTML = '';
+                updatedComments.forEach((comment) => {
+                  const commentItem = document.createElement('li');
+                  commentItem.className = 'comment-';
+                  commentItem.textContent = comment;
+                  commentsList.appendChild(commentItem);
+                });
+              } catch (error) {
+                throw new Error('Error updating comments:', error);
+              }
+            }
+
+            modal.show();
+          }
+        } else {
+          throw new Error('Character ID not found in clicked element');
+        }
+      }
+    });
+
+    modal = new bootstrap.Modal(document.getElementById('modal-container'));
+
+    isInitialized = true;
+  }
+};
 
 window.addEventListener('load', initialize);
