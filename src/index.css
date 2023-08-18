@@ -53,7 +53,10 @@ main {
   display: flex;
 }
 
-.header img {
+.header .logo {
+  background-image: url(./assets/r-and-m-logo.png);
+  background-size: contain;
+  background-repeat: no-repeat;
   width: 80px;
   height: 80px;
   border: 2px solid #fff;
@@ -65,12 +68,12 @@ main {
   border-radius: 190px;
 }
 
-.header img,
+.header .logo,
 li {
   margin: 0 40px 0 40px;
 }
 
-.header img,
+.header .logo,
 li,
 .fa-heart,
 .comment,
@@ -78,12 +81,12 @@ li,
   cursor: pointer;
 }
 
-.modal-body img {
+.modal-body .logo {
   width: 300px;
   height: 300px;
 }
 
-.header img:hover {
+.header .logo:hover {
   transform: scale(1.5);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
