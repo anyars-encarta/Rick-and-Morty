@@ -37,9 +37,9 @@
 - [📝 License](#license)
 
 <!-- INTRO -->
-# 📖 To Do List <a name="about-project"></a>
+# 📖 Rick and Morty <a name="about-project"></a>
 
-> This is a To Do List project to showcase the activities I am to perform.
+> This is a fun app developed where users could pick their favourite Rick and Morty characters, like and add comments to them. This app makes use of two APIs; The added likes and comments are saved to an 
 
 ## 🛠 Built With <a name="built-with"></a>
 1. HTML
