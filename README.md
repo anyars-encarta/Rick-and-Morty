@@ -39,7 +39,7 @@
 <!-- INTRO -->
 # 📖 Rick and Morty <a name="about-project"></a>
 
-> This is a fun app developed where users could pick their favourite Rick and Morty characters, like and add comments to them. This app makes use of two APIs; The added likes and comments are saved to an 
+> This is a fun app developed where users could pick their favourite Rick and Morty characters, like and add comments to them. This app makes use of two APIs; The characters are fetched from https://rickandmortyapi.com/api and the added likes and comments are saved to https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/apps involvement API. On app launch, the characters and their respective likes and comments are fetched from both API respectively.
 
 ## 🛠 Built With <a name="built-with"></a>
 1. HTML
